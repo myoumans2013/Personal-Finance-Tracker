@@ -1,5 +1,7 @@
-package com.youmanscode.personalfinancetrackerapi.Application;
+package com.youmanscode.personalfinancetrackerapi.entity;
 
+import com.youmanscode.personalfinancetrackerapi.enums.Category;
+import com.youmanscode.personalfinancetrackerapi.enums.TransactionType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -16,17 +18,22 @@ public class Transaction {
     private BigDecimal amount;
     @Enumerated(EnumType.STRING)
     @NotNull
-    private Type type;
-    private String category;
+    private TransactionType transactionType;
+    @NotNull
+    private Category category;
     private String description;
+    @NotNull
     private LocalDate transactionDate;
+    @NotNull
     private LocalDate createdAt;
+    @ManyToOne
+    Account account;
 
-    public Transaction(Long id, Long userId, BigDecimal amount, Type type, String category, String description, LocalDate transactionDate, LocalDate createdAt) {
+    public Transaction(Long id, Long userId, BigDecimal amount, TransactionType transactionType, Category category, String description, LocalDate transactionDate, LocalDate createdAt) {
         this.id = id;
         this.userId = userId;
         this.amount = amount;
-        this.type = type;
+        this.transactionType = transactionType;
         this.category = category;
         this.description = description;
         this.transactionDate = transactionDate;
@@ -61,19 +68,19 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public Type getType() {
-        return type;
+    public TransactionType getType() {
+        return transactionType;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setType(TransactionType transactionType) {
+        this.transactionType = transactionType;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 

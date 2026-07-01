@@ -1,5 +1,6 @@
-package com.youmanscode.personalfinancetrackerapi.Application;
+package com.youmanscode.personalfinancetrackerapi.service;
 
+import com.youmanscode.personalfinancetrackerapi.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 
 @Service
