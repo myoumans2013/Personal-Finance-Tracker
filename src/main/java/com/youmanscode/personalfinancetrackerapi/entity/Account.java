@@ -1,6 +1,8 @@
 package com.youmanscode.personalfinancetrackerapi.entity;
 
+import com.youmanscode.personalfinancetrackerapi.enums.AccountName;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -9,21 +11,24 @@ import java.util.List;
 public class Account {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    Long id;
-    Long userId;
-    String name;
-    BigDecimal startingBalance;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private Long userId;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private AccountName accountName;
+    @NotNull
+    private BigDecimal startingBalance;
     @OneToMany
-    List<Transaction> transactions;
+    private List<Transaction> transactions;
 
     public Account() {
     }
 
-    public Account(Long userId, Long id, String name, BigDecimal startingBalance) {
+    public Account(Long userId, Long id, AccountName name, BigDecimal startingBalance) {
         this.userId = userId;
         this.id = id;
-        this.name = name;
+        this.accountName = name;
         this.startingBalance = startingBalance;
     }
 
@@ -43,12 +48,12 @@ public class Account {
         this.userId = userId;
     }
 
-    public String getName() {
-        return name;
+    public AccountName getName() {
+        return accountName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAccountName(AccountName accountName) {
+        this.accountName = accountName;
     }
 
     public BigDecimal getStartingBalance() {

@@ -1,0 +1,20 @@
+### GET all accounts
+GET http://localhost:8080/api/account/getAccounts
+
+### GET all accounts
+GET http://localhost:8080/api/account/getAccounts/1
+
+###
+POST http://localhost:8080/api/account/createAccount
+Content-Type: application/json
+
+{
+  "accountName": "CHECKING",
+  "startingBalance": 1000.00
+}
+
+###
+DELETE http://localhost:8080/api/account/deleteAccount/1
+
+###
+DELETE http://localhost:8080/api/account/deleteAll
