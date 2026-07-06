@@ -1,58 +1,29 @@
-package com.youmanscode.personalfinancetrackerapi.entity;
+package com.youmanscode.personalfinancetrackerapi.dto;
 
 import com.youmanscode.personalfinancetrackerapi.enums.Category;
 import com.youmanscode.personalfinancetrackerapi.enums.TransactionType;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Entity
-public class Transaction {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private Long userId;
+public class TransactionRequest {
+    private Long accountId;
     private BigDecimal amount;
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    private TransactionType transactionType;
-    @NotNull
+    private TransactionType type;
     private Category category;
     private String description;
-    @NotNull
     private LocalDate transactionDate;
-    @ManyToOne
-    Account account;
 
-    public Transaction() {
+    public TransactionRequest() {
 
     }
 
-    public Account getAccount() {
-        return account;
+    public Long getAccountId() {
+        return accountId;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 
     public BigDecimal getAmount() {
@@ -64,11 +35,11 @@ public class Transaction {
     }
 
     public TransactionType getType() {
-        return transactionType;
+        return type;
     }
 
-    public void setType(TransactionType transactionType) {
-        this.transactionType = transactionType;
+    public void setType(TransactionType type) {
+        this.type = type;
     }
 
     public Category getCategory() {
@@ -94,5 +65,4 @@ public class Transaction {
     public void setTransactionDate(LocalDate transactionDate) {
         this.transactionDate = transactionDate;
     }
-
 }

@@ -1,42 +1,32 @@
-package com.youmanscode.personalfinancetrackerapi.entity;
+package com.youmanscode.personalfinancetrackerapi.dto;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.youmanscode.personalfinancetrackerapi.enums.Category;
 import com.youmanscode.personalfinancetrackerapi.enums.TransactionType;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Entity
-public class Transaction {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@JsonPropertyOrder({
+        "id",
+        "amount",
+        "transactionType",
+        "category",
+        "description",
+        "transactionDate",
+        "userId"
+})
+public class TransactionDetails {
     private Long id;
     private Long userId;
     private BigDecimal amount;
-    @Enumerated(EnumType.STRING)
-    @NotNull
     private TransactionType transactionType;
-    @NotNull
     private Category category;
     private String description;
-    @NotNull
     private LocalDate transactionDate;
-    @ManyToOne
-    Account account;
 
-    public Transaction() {
-
-    }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
+    public TransactionDetails() {
     }
 
     public Long getId() {
@@ -63,11 +53,11 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public TransactionType getType() {
+    public TransactionType getTransactionType() {
         return transactionType;
     }
 
-    public void setType(TransactionType transactionType) {
+    public void setTransactionType(TransactionType transactionType) {
         this.transactionType = transactionType;
     }
 
@@ -94,5 +84,4 @@ public class Transaction {
     public void setTransactionDate(LocalDate transactionDate) {
         this.transactionDate = transactionDate;
     }
-
 }

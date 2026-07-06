@@ -1,5 +1,6 @@
 package com.youmanscode.personalfinancetrackerapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.youmanscode.personalfinancetrackerapi.enums.AccountName;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -19,17 +20,24 @@ public class Account {
     private AccountName accountName;
     @NotNull
     private BigDecimal startingBalance;
-    @OneToMany
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
     private List<Transaction> transactions;
 
     public Account() {
+
     }
 
-    public Account(Long userId, Long id, AccountName name, BigDecimal startingBalance) {
-        this.userId = userId;
-        this.id = id;
-        this.accountName = name;
-        this.startingBalance = startingBalance;
+    public Account(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
     public Long getId() {

@@ -1,0 +1,15 @@
+###
+POST http://localhost:8080/api/transaction/createTransaction
+Content-Type: application/json
+
+{
+  "accountId": 4,
+  "amount": 200.00,
+  "type": "TRANSFER",
+  "category": "FOOD",
+  "description": "Burger King",
+  "transactionDate": "2026-07-06"
+}
+
+### GET all transactions
+GET http://localhost:8080/api/transaction/getTransactions/4

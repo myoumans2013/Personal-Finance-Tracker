@@ -1,5 +1,6 @@
 package com.youmanscode.personalfinancetrackerapi.controller;
 
+import com.youmanscode.personalfinancetrackerapi.dto.AccountDetails;
 import com.youmanscode.personalfinancetrackerapi.entity.Account;
 import com.youmanscode.personalfinancetrackerapi.service.AccountService;
 import jakarta.validation.Valid;
@@ -18,7 +19,7 @@ public class AccountController {
     }
 
     @GetMapping("getAccounts")
-    public List<Account> getAllAccounts() {
+    public List<AccountDetails> getAllAccounts() {
         return accountService.getAllAccounts();
     }
 

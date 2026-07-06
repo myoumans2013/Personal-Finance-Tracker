@@ -1,6 +1,9 @@
 package com.youmanscode.personalfinancetrackerapi.service;
 
+import com.youmanscode.personalfinancetrackerapi.dto.AccountDetails;
+import com.youmanscode.personalfinancetrackerapi.dto.TransactionDetails;
 import com.youmanscode.personalfinancetrackerapi.entity.Account;
+import com.youmanscode.personalfinancetrackerapi.entity.Transaction;
 import com.youmanscode.personalfinancetrackerapi.repository.AccountRepository;
 import com.youmanscode.personalfinancetrackerapi.repository.TransactionRepository;
 import org.springframework.http.HttpStatus;
@@ -8,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,14 +20,38 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
+    private final TransactionService transactionService;
 
-    public AccountService(AccountRepository accountRepository, TransactionRepository transactionRepository) {
+    public AccountService(AccountRepository accountRepository, TransactionRepository transactionRepository, TransactionService transactionService) {
         this.accountRepository = accountRepository;
         this.transactionRepository = transactionRepository;
+        this.transactionService = transactionService;
     }
 
-    public List<Account> getAllAccounts() {
-        return accountRepository.findAll();
+    public AccountDetails accountDetailsDTO(Account account) {
+        AccountDetails accountDetails = new AccountDetails();
+        accountDetails.setId(account.getId());
+        accountDetails.setName(account.getName());
+        accountDetails.setStartingBalance(account.getStartingBalance());
+
+        List<Transaction> transactions = transactionRepository.findByAccount_Id(account.getId());
+        List<TransactionDetails> list = new ArrayList<>();
+        for (Transaction transaction : transactions)
+            list.add(transactionService.transferToTransactionDetails(transaction));
+
+        accountDetails.setTransactionList(list);
+        return accountDetails;
+    }
+
+    public List<AccountDetails> getAllAccounts() {
+        List<Account> accounts = accountRepository.findAll();
+        List<AccountDetails> setAccountDetails = new ArrayList<>();
+
+        for (Account account : accounts) {
+           setAccountDetails.add(accountDetailsDTO(account));
+        }
+
+        return setAccountDetails;
     }
 
     public Account createAccount(Account account) {
