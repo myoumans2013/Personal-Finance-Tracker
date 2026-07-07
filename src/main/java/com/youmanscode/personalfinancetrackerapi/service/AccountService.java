@@ -4,6 +4,7 @@ import com.youmanscode.personalfinancetrackerapi.dto.AccountDetails;
 import com.youmanscode.personalfinancetrackerapi.dto.TransactionDetails;
 import com.youmanscode.personalfinancetrackerapi.entity.Account;
 import com.youmanscode.personalfinancetrackerapi.entity.Transaction;
+import com.youmanscode.personalfinancetrackerapi.enums.TransactionType;
 import com.youmanscode.personalfinancetrackerapi.repository.AccountRepository;
 import com.youmanscode.personalfinancetrackerapi.repository.TransactionRepository;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,11 +30,31 @@ public class AccountService {
         this.transactionService = transactionService;
     }
 
+    public BigDecimal getCurrentAccountBalance(Long id) {
+        Optional<Account> account = accountRepository.findById(id);
+        if (account.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        List<Transaction> transactions = transactionRepository.findByAccount_Id(id);
+        Account getAccount = account.get();
+        BigDecimal getBalance = getAccount.getStartingBalance();
+
+        for (Transaction transaction : transactions) {
+            if (transaction.getType().equals(TransactionType.INCOME)) {
+                getBalance = getBalance.add(transaction.getAmount());
+            } else {
+                getBalance = getBalance.subtract(transaction.getAmount());
+            }
+        }
+        return getBalance;
+    }
+
     public AccountDetails accountDetailsDTO(Account account) {
         AccountDetails accountDetails = new AccountDetails();
         accountDetails.setId(account.getId());
         accountDetails.setName(account.getName());
         accountDetails.setStartingBalance(account.getStartingBalance());
+        accountDetails.setCurrentBalance(getCurrentAccountBalance(account.getId()));
 
         List<Transaction> transactions = transactionRepository.findByAccount_Id(account.getId());
         List<TransactionDetails> list = new ArrayList<>();

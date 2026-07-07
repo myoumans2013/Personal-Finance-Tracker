@@ -1,6 +1,5 @@
 package com.youmanscode.personalfinancetrackerapi.repository;
 
-import com.youmanscode.personalfinancetrackerapi.entity.Account;
 import com.youmanscode.personalfinancetrackerapi.entity.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 

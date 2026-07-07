@@ -3,9 +3,9 @@ POST http://localhost:8080/api/transaction/createTransaction
 Content-Type: application/json
 
 {
-  "accountId": 4,
-  "amount": 200.00,
-  "type": "TRANSFER",
+  "accountId": 3,
+  "amount": 50,
+  "type": "INCOME",
   "category": "FOOD",
   "description": "Burger King",
   "transactionDate": "2026-07-06"

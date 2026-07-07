@@ -1,14 +1,25 @@
 package com.youmanscode.personalfinancetrackerapi.dto;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.youmanscode.personalfinancetrackerapi.enums.AccountName;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+@JsonPropertyOrder({
+        "id",
+        "amount",
+        "name",
+        "startingBalance",
+        "currentBalance",
+        "transactionList",
+
+})
 public class AccountDetails {
     Long id;
     AccountName name;
     BigDecimal startingBalance;
+    BigDecimal currentBalance;
     List<TransactionDetails> transactionList;
 
     public AccountDetails() {
@@ -36,6 +47,14 @@ public class AccountDetails {
 
     public void setTransactionList(List<TransactionDetails> transactionList) {
         this.transactionList = transactionList;
+    }
+
+    public BigDecimal getCurrentBalance() {
+        return currentBalance;
+    }
+
+    public void setCurrentBalance(BigDecimal currentBalance) {
+        this.currentBalance = currentBalance;
     }
 
     public BigDecimal getStartingBalance() {

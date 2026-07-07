@@ -6,6 +6,7 @@ import com.youmanscode.personalfinancetrackerapi.service.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -18,7 +19,12 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @GetMapping("getAccounts")
+    @GetMapping("getCurrentBalance/{id}")
+    public BigDecimal getCurrentBalance(@PathVariable Long id) {
+        return accountService.getCurrentAccountBalance(id);
+    }
+
+        @GetMapping("getAccounts")
     public List<AccountDetails> getAllAccounts() {
         return accountService.getAllAccounts();
     }
