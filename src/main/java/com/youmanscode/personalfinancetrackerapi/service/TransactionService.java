@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.swing.*;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -108,6 +109,17 @@ public class TransactionService {
         return transactionDetails;
     }
 
+    public List<TransactionDetails> findTransactionsInBetweenDates(LocalDate date1, LocalDate date2) {
+        List<Transaction> transactions = transactionRepository.findByTransactionDateBetweenOrderByTransactionDateDesc(date1, date2);
+        List<TransactionDetails> transactionDetails = new ArrayList<>();
+
+        for (Transaction transaction : transactions) {
+            transactionDetails.add(transferToTransactionDetails(transaction));
+        }
+
+        return transactionDetails;
+    }
+
     public void updateTransaction(TransactionRequest transactionRequest, Long id) {
         Optional<Transaction> transaction = transactionRepository.findById(id);
         if (transaction.isEmpty()) {
@@ -125,4 +137,6 @@ public class TransactionService {
 
         transactionRepository.save(getTransaction);
     }
+
+
 }

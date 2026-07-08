@@ -9,6 +9,9 @@ import com.youmanscode.personalfinancetrackerapi.service.TransactionService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.*;
+import java.rmi.registry.LocateRegistry;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -38,7 +41,12 @@ public class TransactionController {
     @GetMapping("getTransactionsByType/{type}")
         public List<TransactionDetails> getTransactionsByType(@PathVariable TransactionType type) {
             return transactionService.getTransactionsByTransactionType(type);
-        }
+    }
+
+    @GetMapping("getTransactionsInBetweenDates/{startDate},{endDate}")
+    public List<TransactionDetails> getTransactionsInBetweenDates(@PathVariable LocalDate startDate, @PathVariable LocalDate endDate) {
+        return transactionService.findTransactionsInBetweenDates(startDate,endDate);
+    }
 
     @PostMapping("createTransaction")
     public void createTransaction(@Valid @RequestBody TransactionRequest request) {

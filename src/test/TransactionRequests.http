@@ -12,7 +12,7 @@ Content-Type: application/json
 }
 
 ### Update Transactions by TransactionId
-PUT http://localhost:8080/api/transaction/updateTransaction/1
+PUT http://localhost:8080/api/transaction/updateTransaction/2
 Content-Type: application/json
 
 {
@@ -21,7 +21,7 @@ Content-Type: application/json
   "type": "EXPENSE",
   "category": "FOOD",
   "description": "Chipotle",
-  "transactionDate": "2026-07-08"
+  "transactionDate": "2026-07-07"
 }
 
 ### Get all transactions
@@ -35,3 +35,6 @@ GET http://localhost:8080/api/transaction/getTransactionsByCategory/UTILITIES
 
 ### GET all transactions by type
 GET http://localhost:8080/api/transaction/getTransactionsByType/INCOME
+
+### GET all transactions in between two dates
+GET http://localhost:8080/api/transaction/getTransactionsInBetweenDates/2026-07-07,2026-07-08
