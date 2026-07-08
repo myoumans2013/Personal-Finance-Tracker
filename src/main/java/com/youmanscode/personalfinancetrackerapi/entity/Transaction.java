@@ -15,6 +15,7 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long userId;
+    @NotNull
     private BigDecimal amount;
     @Enumerated(EnumType.STRING)
     @NotNull

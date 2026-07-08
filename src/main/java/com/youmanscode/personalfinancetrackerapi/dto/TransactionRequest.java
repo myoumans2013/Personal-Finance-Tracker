@@ -2,20 +2,26 @@ package com.youmanscode.personalfinancetrackerapi.dto;
 
 import com.youmanscode.personalfinancetrackerapi.enums.Category;
 import com.youmanscode.personalfinancetrackerapi.enums.TransactionType;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class TransactionRequest {
     private Long accountId;
+    @NotNull
     private BigDecimal amount;
+    @NotNull
     private TransactionType type;
+    @NotNull
     private Category category;
+    @NotBlank
     private String description;
+    @NotNull
     private LocalDate transactionDate;
 
     public TransactionRequest() {
-
     }
 
     public Long getAccountId() {

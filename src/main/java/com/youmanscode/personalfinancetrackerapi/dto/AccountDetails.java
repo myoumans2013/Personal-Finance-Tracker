@@ -2,6 +2,8 @@ package com.youmanscode.personalfinancetrackerapi.dto;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.youmanscode.personalfinancetrackerapi.enums.AccountName;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,8 +19,11 @@ import java.util.List;
 })
 public class AccountDetails {
     Long id;
+    @NotNull
     AccountName name;
+    @NotNull
     BigDecimal startingBalance;
+    @NotBlank
     BigDecimal currentBalance;
     List<TransactionDetails> transactionList;
 

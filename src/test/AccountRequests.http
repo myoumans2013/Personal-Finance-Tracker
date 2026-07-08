@@ -4,8 +4,9 @@ GET http://localhost:8080/api/account/getAccounts
 ### GET account by id
 GET http://localhost:8080/api/account/getAccounts/1
 
-### GET current account balance
-GET http://localhost:8080/api/account/getCurrentBalance/4
+### GET current account balance using account id
+GET http://localhost:8080/api/account/getCurrentBalance/3
+
 ###
 POST http://localhost:8080/api/account/createAccount
 Content-Type: application/json

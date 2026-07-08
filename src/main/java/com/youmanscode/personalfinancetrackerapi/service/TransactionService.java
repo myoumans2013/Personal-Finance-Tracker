@@ -4,6 +4,8 @@ import com.youmanscode.personalfinancetrackerapi.dto.TransactionDetails;
 import com.youmanscode.personalfinancetrackerapi.dto.TransactionRequest;
 import com.youmanscode.personalfinancetrackerapi.entity.Account;
 import com.youmanscode.personalfinancetrackerapi.entity.Transaction;
+import com.youmanscode.personalfinancetrackerapi.enums.Category;
+import com.youmanscode.personalfinancetrackerapi.enums.TransactionType;
 import com.youmanscode.personalfinancetrackerapi.repository.AccountRepository;
 import com.youmanscode.personalfinancetrackerapi.repository.TransactionRepository;
 import org.springframework.http.HttpStatus;
@@ -11,9 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class TransactionService {
@@ -48,6 +48,16 @@ public class TransactionService {
         return transactionDetails;
     }
 
+    public List<TransactionDetails> getAllTransactions() {
+        List<Transaction> transactions = transactionRepository.findAllByOrderByTransactionDateDesc();
+        List<TransactionDetails> transactionDetails = new ArrayList<>();
+
+        for (Transaction transaction : transactions) {
+            transactionDetails.add(transferToTransactionDetails(transaction));
+        }
+        return transactionDetails;
+    }
+
     public List<TransactionDetails> getAllTransactionsByAccountId(Long id) {
         List<Transaction> transactions = transactionRepository.findByAccount_Id(id);
         List<TransactionDetails> transactionList = new ArrayList<>();
@@ -69,5 +79,50 @@ public class TransactionService {
         transaction.setAccount(getAccount);
 
         transactionRepository.save(transaction);
+    }
+
+    public List<TransactionDetails> findByCategory(Category category) {
+        List<Transaction> categoryList = transactionRepository.findByCategoryOrderByTransactionDateDesc(category);
+        if (categoryList.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        List<TransactionDetails> newList = new ArrayList<>();
+
+        for (Transaction transaction : categoryList) {
+            newList.add(transferToTransactionDetails(transaction));
+        }
+        return newList;
+    }
+
+    public List<TransactionDetails> getTransactionsByTransactionType(TransactionType type) {
+        List<Transaction> transactions = transactionRepository.findByTransactionTypeOrderByTransactionDateDesc(type);
+        if (transactions.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        List<TransactionDetails> transactionDetails = new ArrayList<>();
+
+        for (Transaction transaction : transactions) {
+            transactionDetails.add(transferToTransactionDetails(transaction));
+        }
+
+        return transactionDetails;
+    }
+
+    public void updateTransaction(TransactionRequest transactionRequest, Long id) {
+        Optional<Transaction> transaction = transactionRepository.findById(id);
+        if (transaction.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        Transaction getTransaction = transaction.get();
+
+        getTransaction.setAmount(transactionRequest.getAmount());
+        getTransaction.setType(transactionRequest.getType());
+        getTransaction.setCategory(transactionRequest.getCategory());
+        getTransaction.setDescription(transactionRequest.getDescription());
+        getTransaction.setTransactionDate(transactionRequest.getTransactionDate());
+
+        transferToTransactionDetails(getTransaction);
+
+        transactionRepository.save(getTransaction);
     }
 }

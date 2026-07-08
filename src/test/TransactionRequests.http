@@ -11,5 +11,27 @@ Content-Type: application/json
   "transactionDate": "2026-07-06"
 }
 
-### GET all transactions
-GET http://localhost:8080/api/transaction/getTransactions/4
+### Update Transactions by TransactionId
+PUT http://localhost:8080/api/transaction/updateTransaction/1
+Content-Type: application/json
+
+{
+  "accountId": 1,
+  "amount": 1000,
+  "type": "EXPENSE",
+  "category": "FOOD",
+  "description": "Chipotle",
+  "transactionDate": "2026-07-08"
+}
+
+### Get all transactions
+GET http://localhost:8080/api/transaction/getAllTransactions
+
+### GET all transactions by accountID
+GET http://localhost:8080/api/transaction/getTransactions/2
+
+### GET all transactions by category
+GET http://localhost:8080/api/transaction/getTransactionsByCategory/UTILITIES
+
+### GET all transactions by type
+GET http://localhost:8080/api/transaction/getTransactionsByType/INCOME

@@ -3,6 +3,8 @@ package com.youmanscode.personalfinancetrackerapi.dto;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.youmanscode.personalfinancetrackerapi.enums.Category;
 import com.youmanscode.personalfinancetrackerapi.enums.TransactionType;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 
 import java.math.BigDecimal;
@@ -20,10 +22,15 @@ import java.time.LocalDate;
 public class TransactionDetails {
     private Long id;
     private Long userId;
+    @NotNull
     private BigDecimal amount;
+    @NotNull
     private TransactionType transactionType;
+    @NotNull
     private Category category;
+    @NotBlank
     private String description;
+    @NotNull
     private LocalDate transactionDate;
 
     public TransactionDetails() {
