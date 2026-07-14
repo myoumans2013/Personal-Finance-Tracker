@@ -38,3 +38,6 @@ GET http://localhost:8080/api/transaction/getTransactionsByType/INCOME
 
 ### GET all transactions in between two dates
 GET http://localhost:8080/api/transaction/getTransactionsInBetweenDates/2026-07-07,2026-07-08
+
+### GET all transactions greater than specified amount
+GET http://localhost:8080/api/transaction/findTransactionsGreaterThanAmount/100

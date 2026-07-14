@@ -3,6 +3,7 @@ package com.youmanscode.personalfinancetrackerapi.controller;
 import com.youmanscode.personalfinancetrackerapi.dto.AccountDetails;
 import com.youmanscode.personalfinancetrackerapi.entity.Account;
 import com.youmanscode.personalfinancetrackerapi.service.AccountService;
+import com.youmanscode.personalfinancetrackerapi.service.DashBoardService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,14 +15,11 @@ import java.util.List;
 public class AccountController {
 
     private final AccountService accountService;
+    private final DashBoardService dashBoardService;
 
-    public AccountController(AccountService accountService) {
+    public AccountController(AccountService accountService, DashBoardService dashBoardService) {
         this.accountService = accountService;
-    }
-
-    @GetMapping("getCurrentBalance/{id}")
-    public BigDecimal getCurrentBalance(@PathVariable Long id) {
-        return accountService.getCurrentAccountBalance(id);
+        this.dashBoardService = dashBoardService;
     }
 
         @GetMapping("getAccounts")

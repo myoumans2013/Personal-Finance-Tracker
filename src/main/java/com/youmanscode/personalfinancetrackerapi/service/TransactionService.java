@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.swing.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -82,7 +83,7 @@ public class TransactionService {
         transactionRepository.save(transaction);
     }
 
-    public List<TransactionDetails> findByCategory(Category category) {
+    public List<TransactionDetails> getByCategory(Category category) {
         List<Transaction> categoryList = transactionRepository.findByCategoryOrderByTransactionDateDesc(category);
         if (categoryList.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -109,7 +110,7 @@ public class TransactionService {
         return transactionDetails;
     }
 
-    public List<TransactionDetails> findTransactionsInBetweenDates(LocalDate date1, LocalDate date2) {
+    public List<TransactionDetails> getTransactionsInBetweenDates(LocalDate date1, LocalDate date2) {
         List<Transaction> transactions = transactionRepository.findByTransactionDateBetweenOrderByTransactionDateDesc(date1, date2);
         List<TransactionDetails> transactionDetails = new ArrayList<>();
 
@@ -117,6 +118,16 @@ public class TransactionService {
             transactionDetails.add(transferToTransactionDetails(transaction));
         }
 
+        return transactionDetails;
+    }
+
+    public List<TransactionDetails> getTransactionsGreaterThanAmount(BigDecimal amount) {
+        List<Transaction> transactions = transactionRepository.findAllByAmountGreaterThan(amount);
+        List<TransactionDetails> transactionDetails = new ArrayList<>();
+
+        for (Transaction transaction : transactions) {
+            transactionDetails.add(transferToTransactionDetails(transaction));
+        }
         return transactionDetails;
     }
 

@@ -23,30 +23,13 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
     private final TransactionService transactionService;
+    private final DashBoardService dashBoardService;
 
-    public AccountService(AccountRepository accountRepository, TransactionRepository transactionRepository, TransactionService transactionService) {
+    public AccountService(AccountRepository accountRepository, TransactionRepository transactionRepository, TransactionService transactionService, DashBoardService dashBoardService) {
         this.accountRepository = accountRepository;
         this.transactionRepository = transactionRepository;
         this.transactionService = transactionService;
-    }
-
-    public BigDecimal getCurrentAccountBalance(Long id) {
-        Optional<Account> account = accountRepository.findById(id);
-        if (account.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-        List<Transaction> transactions = transactionRepository.findByAccount_Id(id);
-        Account getAccount = account.get();
-        BigDecimal getBalance = getAccount.getStartingBalance();
-
-        for (Transaction transaction : transactions) {
-            if (transaction.getType().equals(TransactionType.INCOME)) {
-                getBalance = getBalance.add(transaction.getAmount());
-            } else {
-                getBalance = getBalance.subtract(transaction.getAmount());
-            }
-        }
-        return getBalance;
+        this.dashBoardService = dashBoardService;
     }
 
     public AccountDetails accountDetailsDTO(Account account) {
@@ -54,7 +37,7 @@ public class AccountService {
         accountDetails.setId(account.getId());
         accountDetails.setName(account.getName());
         accountDetails.setStartingBalance(account.getStartingBalance());
-        accountDetails.setCurrentBalance(getCurrentAccountBalance(account.getId()));
+        accountDetails.setCurrentBalance(dashBoardService.getCurrentAccountBalance(account.getId()));
 
         List<Transaction> transactions = transactionRepository.findByAccount_Id(account.getId());
         List<TransactionDetails> list = new ArrayList<>();

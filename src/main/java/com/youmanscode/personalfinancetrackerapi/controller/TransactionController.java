@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.*;
+import java.math.BigDecimal;
 import java.rmi.registry.LocateRegistry;
 import java.time.LocalDate;
 import java.util.List;
@@ -35,7 +36,7 @@ public class TransactionController {
 
     @GetMapping("getTransactionsByCategory/{category}")
     public List<TransactionDetails> getTransactionsByCategory(@PathVariable Category category) {
-        return transactionService.findByCategory(category);
+        return transactionService.getByCategory(category);
     }
 
     @GetMapping("getTransactionsByType/{type}")
@@ -45,7 +46,12 @@ public class TransactionController {
 
     @GetMapping("getTransactionsInBetweenDates/{startDate},{endDate}")
     public List<TransactionDetails> getTransactionsInBetweenDates(@PathVariable LocalDate startDate, @PathVariable LocalDate endDate) {
-        return transactionService.findTransactionsInBetweenDates(startDate,endDate);
+        return transactionService.getTransactionsInBetweenDates(startDate,endDate);
+    }
+
+    @GetMapping("findTransactionsGreaterThanAmount/{amount}")
+    public List<TransactionDetails> findTransactionsGreaterThanAmount(@PathVariable BigDecimal amount) {
+        return transactionService.getTransactionsGreaterThanAmount(amount);
     }
 
     @PostMapping("createTransaction")
