@@ -1,0 +1,17 @@
+### Get DashBoard Details of Account
+GET http://localhost:8080/dashboard/getDashBoard/3
+
+### Get Total Income of Account through Transactions
+GET http://localhost:8080/dashboard/getTotalIncome/3
+
+### Get Total Income of Account through Transactions
+GET http://localhost:8080/dashboard/getTotalExpenses/1
+
+### Get Total Transaction Count of Account
+GET http://localhost:8080/dashboard/getTransactionCountOfAccount/1
+
+### Get Largest Income
+GET http://localhost:8080/dashboard/getLargestIncome/3
+
+### Get Largest Expense
+GET http://localhost:8080/dashboard/getLargestExpense/1
