@@ -66,7 +66,7 @@ public class TransactionService {
         List<TransactionDetails> transactionList = new ArrayList<>();
 
         if (transactions.isEmpty()) {
-            throw new ResourceNotFoundException("Account with id " + id + " not found.");
+            throw new ResourceNotFoundException("Account with ID: #" + id + " not found.");
         }
 
         for (Transaction transaction : transactions) {
@@ -79,7 +79,7 @@ public class TransactionService {
     public void createTransaction(TransactionRequest request) {
         Transaction transaction = transferToTransactionEntity(request);
         Account account = accountRepository.findById(request.getAccountId())
-                .orElseThrow(() -> new ResourceNotFoundException("Account with id " + request.getAccountId() + " not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Account with ID: #" + request.getAccountId() + " not found."));
         transaction.setAccount(account);
 
         transactionRepository.save(transaction);
@@ -143,7 +143,7 @@ public class TransactionService {
 
     public void updateTransaction(TransactionRequest transactionRequest, Long id) {
         Transaction transaction = transactionRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Cannot find transaction with Id: #" + id));;
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find transaction with ID: #" + id));
 
         transaction.setAmount(transactionRequest.getAmount());
         transaction.setType(transactionRequest.getType());
@@ -154,6 +154,16 @@ public class TransactionService {
         transferToTransactionDetails(transaction);
 
         transactionRepository.save(transaction);
+    }
+
+    public void deleteTransactionByID(Long id) {
+        Transaction transaction = transactionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find transaction with ID: #" + id));
+        transactionRepository.delete(transaction);
+    }
+
+    public void deleteAllTransactions() {
+        transactionRepository.deleteAll();
     }
 
 

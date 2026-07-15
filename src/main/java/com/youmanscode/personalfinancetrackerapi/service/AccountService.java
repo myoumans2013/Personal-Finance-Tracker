@@ -45,6 +45,9 @@ public class AccountService {
 
     public List<AccountDetails> getAllAccounts() {
         List<Account> accounts = accountRepository.findAll();
+        if (accounts.isEmpty()) {
+            throw new ResourceNotFoundException("Cannot find any accounts.");
+        }
         List<AccountDetails> setAccountDetails = new ArrayList<>();
 
         for (Account account : accounts) {
@@ -60,12 +63,23 @@ public class AccountService {
 
     public Account getAccountsById(Long id) {
         return accountRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Account with id " + id + " not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Account with ID: #" + id + " not found."));
+    }
+
+    public void updateAccount(Long id, Account newAccountInfo) {
+        Account existingAccount = accountRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Account with ID: #" + id + " not found."));
+
+        existingAccount.setAccountName(newAccountInfo.getName());
+        existingAccount.setStartingBalance(newAccountInfo.getStartingBalance());
+
+        accountRepository.save(existingAccount);
+
     }
 
     public void deleteAccountById(Long accountId) throws Exception {
        Account account = accountRepository.findById(accountId)
-               .orElseThrow(() -> new ResourceNotFoundException("Account with Id: #" + accountId + " not found."));
+               .orElseThrow(() -> new ResourceNotFoundException("Account with ID: #" + accountId + " not found."));
         if (transactionRepository.existsByAccount_Id(accountId)) {
             throw new Exception("Transactions must be deleted before account deletion.");
         }

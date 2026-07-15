@@ -17,7 +17,16 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:8080/api/account/deleteAccount/5
+PUT http://localhost:8080/api/account/updateAccount/6
+Content-Type: application/json
+
+{
+  "accountName": "SAVINGS",
+  "startingBalance": 2000
+}
+
+###
+DELETE http://localhost:8080/api/account/deleteAccount/7
 
 ###
 DELETE http://localhost:8080/api/account/deleteAll

@@ -15,7 +15,6 @@ import java.util.List;
         "startingBalance",
         "currentBalance",
         "transactionList",
-
 })
 public class AccountDetails {
     Long id;

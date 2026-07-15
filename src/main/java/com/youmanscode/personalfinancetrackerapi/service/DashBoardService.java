@@ -7,13 +7,10 @@ import com.youmanscode.personalfinancetrackerapi.enums.TransactionType;
 import com.youmanscode.personalfinancetrackerapi.exceptionhandling.ResourceNotFoundException;
 import com.youmanscode.personalfinancetrackerapi.repository.AccountRepository;
 import com.youmanscode.personalfinancetrackerapi.repository.TransactionRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DashBoardService {
@@ -41,7 +38,7 @@ public class DashBoardService {
 
     public BigDecimal getCurrentAccountBalance(Long id) {
         Account account = accountRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Cannot find account with the Id: #" + id + "."));
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find account with the ID: #" + id + "."));
         List<Transaction> transactions = transactionRepository.findByAccount_Id(id);
         BigDecimal getBalance = account.getStartingBalance();
 

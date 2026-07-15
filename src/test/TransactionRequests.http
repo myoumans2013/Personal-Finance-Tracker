@@ -3,8 +3,8 @@ POST http://localhost:8080/api/transaction/createTransaction
 Content-Type: application/json
 
 {
-  "accountId": 3,
-  "amount": 50,
+  "accountId": 1,
+  "amount": 100,
   "type": "INCOME",
   "category": "FOOD",
   "description": "Burger King",
@@ -12,7 +12,7 @@ Content-Type: application/json
 }
 
 ### Update Transactions by TransactionId
-PUT http://localhost:8080/api/transaction/updateTransaction/25
+PUT http://localhost:8080/api/transaction/updateTransaction/85
 Content-Type: application/json
 
 {
@@ -28,7 +28,7 @@ Content-Type: application/json
 GET http://localhost:8080/api/transaction/getAllTransactions
 
 ### GET all transactions by accountID
-GET http://localhost:8080/api/transaction/getTransactions/2
+GET http://localhost:8080/api/transaction/getTransactions/85
 
 ### GET all transactions by category
 GET http://localhost:8080/api/transaction/getTransactionsByCategory/TRANSPORTATION
@@ -41,3 +41,9 @@ GET http://localhost:8080/api/transaction/getTransactionsInBetweenDates/2026-05-
 
 ### GET all transactions greater than specified amount
 GET http://localhost:8080/api/transaction/findTransactionsGreaterThanAmount/10000
+
+### DELETE transactions by ID
+DELETE http://localhost:8080/api/transaction/deleteTransactions/25
+
+### DELETE all transactions
+DELETE http://localhost:8080/api/transaction/deleteAllTransactions

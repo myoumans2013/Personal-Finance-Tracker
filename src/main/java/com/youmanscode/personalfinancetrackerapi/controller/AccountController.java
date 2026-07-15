@@ -22,7 +22,7 @@ public class AccountController {
         this.dashBoardService = dashBoardService;
     }
 
-        @GetMapping("getAccounts")
+    @GetMapping("getAccounts")
     public List<AccountDetails> getAllAccounts() {
         return accountService.getAllAccounts();
     }
@@ -30,6 +30,11 @@ public class AccountController {
     @GetMapping("getAccounts/{id}")
     public Account getAccountsById(@PathVariable Long id) {
         return accountService.getAccountsById(id);
+    }
+
+    @PutMapping("updateAccount/{id}")
+    public void updateAccount(@PathVariable Long id, @Valid @RequestBody Account account) {
+        accountService.updateAccount(id, account);
     }
 
     @PostMapping("createAccount")
