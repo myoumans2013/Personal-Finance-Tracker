@@ -4,18 +4,13 @@ import com.youmanscode.personalfinancetrackerapi.dto.AccountDetails;
 import com.youmanscode.personalfinancetrackerapi.dto.TransactionDetails;
 import com.youmanscode.personalfinancetrackerapi.entity.Account;
 import com.youmanscode.personalfinancetrackerapi.entity.Transaction;
-import com.youmanscode.personalfinancetrackerapi.enums.TransactionType;
+import com.youmanscode.personalfinancetrackerapi.exceptionhandling.ResourceNotFoundException;
 import com.youmanscode.personalfinancetrackerapi.repository.AccountRepository;
 import com.youmanscode.personalfinancetrackerapi.repository.TransactionRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AccountService {
@@ -64,23 +59,17 @@ public class AccountService {
     }
 
     public Account getAccountsById(Long id) {
-        Optional<Account> account = accountRepository.getAccountsById(id);
-        if (account.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-        return account.get();
+        return accountRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Account with id " + id + " not found."));
     }
 
     public void deleteAccountById(Long accountId) throws Exception {
-        Optional<Account> account = accountRepository.findById(accountId);
-        if (account.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+       Account account = accountRepository.findById(accountId)
+               .orElseThrow(() -> new ResourceNotFoundException("Account with Id: #" + accountId + " not found."));
         if (transactionRepository.existsByAccount_Id(accountId)) {
             throw new Exception("Transactions must be deleted before account deletion.");
         }
-        Account deleteAccount = account.get();
-        accountRepository.delete(deleteAccount);
+        accountRepository.delete(account);
     }
 
     public void deleteAllAccountsAndTransactions() {
