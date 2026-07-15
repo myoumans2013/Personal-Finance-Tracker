@@ -1,5 +1,6 @@
 package com.youmanscode.personalfinancetrackerapi.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.youmanscode.personalfinancetrackerapi.enums.Category;
 import com.youmanscode.personalfinancetrackerapi.enums.TransactionType;
 import jakarta.validation.constraints.NotBlank;
@@ -19,6 +20,7 @@ public class TransactionRequest {
     @NotBlank
     private String description;
     @NotNull
+    @JsonFormat(pattern = "MM-dd-yyyy")
     private LocalDate transactionDate;
 
     public TransactionRequest() {
