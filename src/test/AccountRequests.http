@@ -13,15 +13,15 @@ Content-Type: application/json
 
 {
   "accountName": "CHECKING",
-  "startingBalance": 1000
+  "startingBalance": -5
 }
 
 ###
-PUT http://localhost:8080/api/account/updateAccount/6
+PUT http://localhost:8080/api/account/updateAccount/4
 Content-Type: application/json
 
 {
-  "accountName": "SAVINGS",
+  "accountName": "CHECKING",
   "startingBalance": 2000
 }
 

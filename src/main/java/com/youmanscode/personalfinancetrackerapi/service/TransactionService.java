@@ -6,12 +6,11 @@ import com.youmanscode.personalfinancetrackerapi.entity.Account;
 import com.youmanscode.personalfinancetrackerapi.entity.Transaction;
 import com.youmanscode.personalfinancetrackerapi.enums.Category;
 import com.youmanscode.personalfinancetrackerapi.enums.TransactionType;
+import com.youmanscode.personalfinancetrackerapi.exceptionhandling.IllegalArgumentException;
 import com.youmanscode.personalfinancetrackerapi.exceptionhandling.ResourceNotFoundException;
 import com.youmanscode.personalfinancetrackerapi.repository.AccountRepository;
 import com.youmanscode.personalfinancetrackerapi.repository.TransactionRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.swing.*;
 import java.math.BigDecimal;
@@ -31,6 +30,9 @@ public class TransactionService {
     public Transaction transferToTransactionEntity(TransactionRequest request) {
         Transaction transaction = new Transaction();
         transaction.setAmount(request.getAmount());
+        if (request.getAmount().compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Amount cannot be less than 0.");
+        }
         transaction.setType(request.getType());
         transaction.setCategory(request.getCategory());
         transaction.setDescription(request.getDescription());
@@ -43,6 +45,9 @@ public class TransactionService {
         transactionDetails.setId(transaction.getId());
         transactionDetails.setUserId(transaction.getUserId());
         transactionDetails.setAmount(transaction.getAmount());
+        if (transaction.getAmount().compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Amount cannot be less than 0.");
+        }
         transactionDetails.setTransactionType(transaction.getType());
         transactionDetails.setCategory(transaction.getCategory());
         transactionDetails.setDescription(transaction.getDescription());
@@ -81,6 +86,21 @@ public class TransactionService {
         Account account = accountRepository.findById(request.getAccountId())
                 .orElseThrow(() -> new ResourceNotFoundException("Account with ID: #" + request.getAccountId() + " not found."));
         transaction.setAccount(account);
+
+        transactionRepository.save(transaction);
+    }
+
+    public void updateTransaction(TransactionRequest transactionRequest, Long id) {
+        Transaction transaction = transactionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find transaction with ID: #" + id));
+
+        transaction.setAmount(transactionRequest.getAmount());
+        transaction.setType(transactionRequest.getType());
+        transaction.setCategory(transactionRequest.getCategory());
+        transaction.setDescription(transactionRequest.getDescription());
+        transaction.setTransactionDate(transactionRequest.getTransactionDate());
+
+        transferToTransactionDetails(transaction);
 
         transactionRepository.save(transaction);
     }
@@ -139,21 +159,6 @@ public class TransactionService {
             transactionDetails.add(transferToTransactionDetails(transaction));
         }
         return transactionDetails;
-    }
-
-    public void updateTransaction(TransactionRequest transactionRequest, Long id) {
-        Transaction transaction = transactionRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Cannot find transaction with ID: #" + id));
-
-        transaction.setAmount(transactionRequest.getAmount());
-        transaction.setType(transactionRequest.getType());
-        transaction.setCategory(transactionRequest.getCategory());
-        transaction.setDescription(transactionRequest.getDescription());
-        transaction.setTransactionDate(transactionRequest.getTransactionDate());
-
-        transferToTransactionDetails(transaction);
-
-        transactionRepository.save(transaction);
     }
 
     public void deleteTransactionByID(Long id) {

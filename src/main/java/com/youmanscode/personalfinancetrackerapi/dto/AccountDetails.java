@@ -18,9 +18,9 @@ import java.util.List;
 })
 public class AccountDetails {
     Long id;
-    @NotNull
+    @NotNull(message = "Account name cannot be empty.")
     AccountName name;
-    @NotNull
+    @NotNull(message = "Starting balance cannot be empty.")
     BigDecimal startingBalance;
     @NotBlank
     BigDecimal currentBalance;

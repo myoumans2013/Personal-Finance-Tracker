@@ -4,15 +4,15 @@ Content-Type: application/json
 
 {
   "accountId": 1,
-  "amount": 100,
+  "amount": 100.00,
   "type": "INCOME",
   "category": "FOOD",
   "description": "Burger King",
-  "transactionDate": "2026-07-06"
+  "transactionDate": "07-06-2026"
 }
 
 ### Update Transactions by TransactionId
-PUT http://localhost:8080/api/transaction/updateTransaction/85
+PUT http://localhost:8080/api/transaction/updateTransaction/12
 Content-Type: application/json
 
 {
@@ -21,7 +21,7 @@ Content-Type: application/json
   "type": "EXPENSE",
   "category": "FOOD",
   "description": "Chipotle",
-  "transactionDate": "2026-07-07"
+  "transactionDate": "07-06-2026"
 }
 
 ### Get all transactions

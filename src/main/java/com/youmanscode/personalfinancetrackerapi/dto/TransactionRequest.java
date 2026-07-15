@@ -11,15 +11,15 @@ import java.time.LocalDate;
 
 public class TransactionRequest {
     private Long accountId;
-    @NotNull
+    @NotNull(message = "Amount cannot be empty")
     private BigDecimal amount;
-    @NotNull
+    @NotNull(message = "Type cannot be empty")
     private TransactionType type;
-    @NotNull
+    @NotNull(message = "Category cannot be empty")
     private Category category;
-    @NotBlank
+    @NotBlank(message = "Description cannot be empty")
     private String description;
-    @NotNull
+    @NotNull(message = "Date cannot be empty")
     @JsonFormat(pattern = "MM-dd-yyyy")
     private LocalDate transactionDate;
 

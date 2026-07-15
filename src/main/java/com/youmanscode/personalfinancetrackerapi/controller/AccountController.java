@@ -1,13 +1,13 @@
 package com.youmanscode.personalfinancetrackerapi.controller;
 
 import com.youmanscode.personalfinancetrackerapi.dto.AccountDetails;
+import com.youmanscode.personalfinancetrackerapi.dto.AccountRequest;
 import com.youmanscode.personalfinancetrackerapi.entity.Account;
 import com.youmanscode.personalfinancetrackerapi.service.AccountService;
 import com.youmanscode.personalfinancetrackerapi.service.DashBoardService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -15,11 +15,9 @@ import java.util.List;
 public class AccountController {
 
     private final AccountService accountService;
-    private final DashBoardService dashBoardService;
 
-    public AccountController(AccountService accountService, DashBoardService dashBoardService) {
+    public AccountController(AccountService accountService) {
         this.accountService = accountService;
-        this.dashBoardService = dashBoardService;
     }
 
     @GetMapping("getAccounts")
@@ -38,8 +36,8 @@ public class AccountController {
     }
 
     @PostMapping("createAccount")
-    public Account createAccount(@Valid @RequestBody Account account) {
-        return accountService.createAccount(account);
+    public void createAccount(@Valid @RequestBody AccountRequest accountRequest) {
+        accountService.createAccount(accountRequest);
     }
 
     @DeleteMapping("deleteAccount/{id}")

@@ -1,14 +1,17 @@
 package com.youmanscode.personalfinancetrackerapi.service;
 
 import com.youmanscode.personalfinancetrackerapi.dto.AccountDetails;
+import com.youmanscode.personalfinancetrackerapi.dto.AccountRequest;
 import com.youmanscode.personalfinancetrackerapi.dto.TransactionDetails;
 import com.youmanscode.personalfinancetrackerapi.entity.Account;
 import com.youmanscode.personalfinancetrackerapi.entity.Transaction;
+import com.youmanscode.personalfinancetrackerapi.exceptionhandling.IllegalArgumentException;
 import com.youmanscode.personalfinancetrackerapi.exceptionhandling.ResourceNotFoundException;
 import com.youmanscode.personalfinancetrackerapi.repository.AccountRepository;
 import com.youmanscode.personalfinancetrackerapi.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +35,11 @@ public class AccountService {
         accountDetails.setId(account.getId());
         accountDetails.setName(account.getName());
         accountDetails.setStartingBalance(account.getStartingBalance());
+        if (account.getStartingBalance().compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Starting balance cannot be less than 0.");
+        }
         accountDetails.setCurrentBalance(dashBoardService.getCurrentAccountBalance(account.getId()));
+
 
         List<Transaction> transactions = transactionRepository.findByAccount_Id(account.getId());
         List<TransactionDetails> list = new ArrayList<>();
@@ -41,6 +48,17 @@ public class AccountService {
 
         accountDetails.setTransactionList(list);
         return accountDetails;
+    }
+
+    public Account accountRequest(AccountRequest accountRequest) {
+        Account account = new Account();
+        account.setAccountName(accountRequest.getAccountName());
+        account.setStartingBalance(accountRequest.getStartingBalance());
+        if (accountRequest.getStartingBalance().compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Value cannot be less than 0");
+        }
+
+        return account;
     }
 
     public List<AccountDetails> getAllAccounts() {
@@ -57,8 +75,8 @@ public class AccountService {
         return setAccountDetails;
     }
 
-    public Account createAccount(Account account) {
-        return accountRepository.save(account);
+    public void createAccount(AccountRequest accountRequest) {
+        accountRepository.save(accountRequest(accountRequest));
     }
 
     public Account getAccountsById(Long id) {
