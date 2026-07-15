@@ -4,6 +4,7 @@ import com.youmanscode.personalfinancetrackerapi.dto.DashBoardDetails;
 import com.youmanscode.personalfinancetrackerapi.entity.Account;
 import com.youmanscode.personalfinancetrackerapi.entity.Transaction;
 import com.youmanscode.personalfinancetrackerapi.enums.TransactionType;
+import com.youmanscode.personalfinancetrackerapi.exceptionhandling.ResourceNotFoundException;
 import com.youmanscode.personalfinancetrackerapi.repository.AccountRepository;
 import com.youmanscode.personalfinancetrackerapi.repository.TransactionRepository;
 import org.springframework.http.HttpStatus;
@@ -39,13 +40,10 @@ public class DashBoardService {
     }
 
     public BigDecimal getCurrentAccountBalance(Long id) {
-        Optional<Account> account = accountRepository.findById(id);
-        if (account.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+        Account account = accountRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find account with the Id: #" + id + "."));
         List<Transaction> transactions = transactionRepository.findByAccount_Id(id);
-        Account getAccount = account.get();
-        BigDecimal getBalance = getAccount.getStartingBalance();
+        BigDecimal getBalance = account.getStartingBalance();
 
         for (Transaction transaction : transactions) {
             if (transaction.getType().equals(TransactionType.INCOME)) {
