@@ -12,7 +12,7 @@ Content-Type: application/json
 }
 
 ### Update Transactions by TransactionId
-PUT http://localhost:8080/api/transaction/updateTransaction/2
+PUT http://localhost:8080/api/transaction/updateTransaction/25
 Content-Type: application/json
 
 {
@@ -31,13 +31,13 @@ GET http://localhost:8080/api/transaction/getAllTransactions
 GET http://localhost:8080/api/transaction/getTransactions/2
 
 ### GET all transactions by category
-GET http://localhost:8080/api/transaction/getTransactionsByCategory/UTILITIES
+GET http://localhost:8080/api/transaction/getTransactionsByCategory/TRANSPORTATION
 
 ### GET all transactions by type
 GET http://localhost:8080/api/transaction/getTransactionsByType/INCOME
 
 ### GET all transactions in between two dates
-GET http://localhost:8080/api/transaction/getTransactionsInBetweenDates/2026-07-07,2026-07-08
+GET http://localhost:8080/api/transaction/getTransactionsInBetweenDates/2026-05-07,2026-05-08
 
 ### GET all transactions greater than specified amount
-GET http://localhost:8080/api/transaction/findTransactionsGreaterThanAmount/100
+GET http://localhost:8080/api/transaction/findTransactionsGreaterThanAmount/10000

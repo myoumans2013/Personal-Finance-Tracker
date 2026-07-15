@@ -6,6 +6,7 @@ import com.youmanscode.personalfinancetrackerapi.entity.Account;
 import com.youmanscode.personalfinancetrackerapi.entity.Transaction;
 import com.youmanscode.personalfinancetrackerapi.enums.Category;
 import com.youmanscode.personalfinancetrackerapi.enums.TransactionType;
+import com.youmanscode.personalfinancetrackerapi.exceptionhandling.ResourceNotFoundException;
 import com.youmanscode.personalfinancetrackerapi.repository.AccountRepository;
 import com.youmanscode.personalfinancetrackerapi.repository.TransactionRepository;
 import org.springframework.http.HttpStatus;
@@ -64,6 +65,10 @@ public class TransactionService {
         List<Transaction> transactions = transactionRepository.findByAccount_Id(id);
         List<TransactionDetails> transactionList = new ArrayList<>();
 
+        if (transactions.isEmpty()) {
+            throw new ResourceNotFoundException("Account with id " + id + " not found.");
+        }
+
         for (Transaction transaction : transactions) {
             transactionList.add(transferToTransactionDetails(transaction));
         }
@@ -73,12 +78,9 @@ public class TransactionService {
 
     public void createTransaction(TransactionRequest request) {
         Transaction transaction = transferToTransactionEntity(request);
-        Optional<Account> account = accountRepository.findById(request.getAccountId());
-        if (account.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-        Account getAccount = account.get();
-        transaction.setAccount(getAccount);
+        Account account = accountRepository.findById(request.getAccountId())
+                .orElseThrow(() -> new ResourceNotFoundException("Account with id " + request.getAccountId() + " not found."));
+        transaction.setAccount(account);
 
         transactionRepository.save(transaction);
     }
@@ -86,7 +88,7 @@ public class TransactionService {
     public List<TransactionDetails> getByCategory(Category category) {
         List<Transaction> categoryList = transactionRepository.findByCategoryOrderByTransactionDateDesc(category);
         if (categoryList.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("Cannot find any transactions with the category: " + category.toString().toLowerCase() + ".");
         }
         List<TransactionDetails> newList = new ArrayList<>();
 
@@ -99,7 +101,7 @@ public class TransactionService {
     public List<TransactionDetails> getTransactionsByTransactionType(TransactionType type) {
         List<Transaction> transactions = transactionRepository.findByTransactionTypeOrderByTransactionDateDesc(type);
         if (transactions.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("Cannot find any transactions that match the transaction type: " + type);
         }
         List<TransactionDetails> transactionDetails = new ArrayList<>();
 
@@ -114,6 +116,10 @@ public class TransactionService {
         List<Transaction> transactions = transactionRepository.findByTransactionDateBetweenOrderByTransactionDateDesc(date1, date2);
         List<TransactionDetails> transactionDetails = new ArrayList<>();
 
+        if (transactions.isEmpty()) {
+            throw new ResourceNotFoundException("Cannot find any transactions between " + date1 + " and " + date2 + ".");
+        }
+
         for (Transaction transaction : transactions) {
             transactionDetails.add(transferToTransactionDetails(transaction));
         }
@@ -125,6 +131,10 @@ public class TransactionService {
         List<Transaction> transactions = transactionRepository.findAllByAmountGreaterThan(amount);
         List<TransactionDetails> transactionDetails = new ArrayList<>();
 
+        if (transactions.isEmpty()) {
+            throw new ResourceNotFoundException("Cannot find any transactions greater than $" + amount + ".");
+        }
+
         for (Transaction transaction : transactions) {
             transactionDetails.add(transferToTransactionDetails(transaction));
         }
@@ -132,21 +142,18 @@ public class TransactionService {
     }
 
     public void updateTransaction(TransactionRequest transactionRequest, Long id) {
-        Optional<Transaction> transaction = transactionRepository.findById(id);
-        if (transaction.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-        Transaction getTransaction = transaction.get();
+        Transaction transaction = transactionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find transaction with Id: #" + id));;
 
-        getTransaction.setAmount(transactionRequest.getAmount());
-        getTransaction.setType(transactionRequest.getType());
-        getTransaction.setCategory(transactionRequest.getCategory());
-        getTransaction.setDescription(transactionRequest.getDescription());
-        getTransaction.setTransactionDate(transactionRequest.getTransactionDate());
+        transaction.setAmount(transactionRequest.getAmount());
+        transaction.setType(transactionRequest.getType());
+        transaction.setCategory(transactionRequest.getCategory());
+        transaction.setDescription(transactionRequest.getDescription());
+        transaction.setTransactionDate(transactionRequest.getTransactionDate());
 
-        transferToTransactionDetails(getTransaction);
+        transferToTransactionDetails(transaction);
 
-        transactionRepository.save(getTransaction);
+        transactionRepository.save(transaction);
     }
 
 
